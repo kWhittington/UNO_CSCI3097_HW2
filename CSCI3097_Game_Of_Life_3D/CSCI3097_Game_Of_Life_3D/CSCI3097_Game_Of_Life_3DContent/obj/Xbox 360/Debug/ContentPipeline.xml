@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>Cell_Alive.bmp</Source>
+      <Name>Cell_Alive</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Cell_Alive.xnb</Output>
+      <Time>2012-02-02T14:11:11.106897-06:00</Time>
+    </Item>
+    <Item>
+      <Source>Cell_Kill.bmp</Source>
+      <Name>Cell_Kill</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Cell_Kill.xnb</Output>
+      <Time>2012-02-02T14:11:11.107897-06:00</Time>
+    </Item>
+    <Item>
+      <Source>Cell_Selected.png</Source>
+      <Name>Cell_Selected</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Cell_Selected.xnb</Output>
+      <Time>2012-02-02T14:11:11.1098971-06:00</Time>
+    </Item>
+    <Item>
+      <Source>Grid_Background.bmp</Source>
+      <Name>Grid_Background</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Grid_Background.xnb</Output>
+      <Time>2012-02-02T14:11:11.1118972-06:00</Time>
+    </Item>
+    <Item>
+      <Source>box.fbx</Source>
+      <Name>box</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\box.xnb</Output>
+      <Time>2012-02-02T14:16:32.775999-06:00</Time>
+      <Dependency>
+        <Key>obj\Xbox 360\Debug\box_0.xml</Key>
+        <Value>2012-02-02T14:20:27.3949874-06:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>box.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\Xbox 360\Debug\box_0.xml</Output>
+      <Time>2012-02-02T14:16:32.775999-06:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <TargetPlatform>Xbox360</TargetPlatform>
+      <TargetProfile>HiDef</TargetProfile>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>true</CompressContent>
+      <RootDirectory>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3DContent\</RootDirectory>
+      <LoggerRootDirectory>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\</LoggerRootDirectory>
+      <IntermediateDirectory>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3DContent\obj\Xbox 360\Debug\</IntermediateDirectory>
+      <OutputDirectory>C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-05:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2010-08-23T12:41:18-05:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-05:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-05:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2010-08-23T12:41:18-05:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2010-08-23T12:41:18-05:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Windows\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2011-04-12T15:09:21.9719107-05:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>

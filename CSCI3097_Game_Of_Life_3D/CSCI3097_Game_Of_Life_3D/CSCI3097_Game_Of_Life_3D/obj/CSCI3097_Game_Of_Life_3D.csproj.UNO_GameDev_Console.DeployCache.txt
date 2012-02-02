@@ -1,0 +1,19 @@
+9f2c9236f9ab4813adbf1437c54cba3b
+0
+UNO_GameDev_Console
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\
+129726870800000000
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\GameThumbnail.png
+2012-02-02T20:10:25.7593032Z
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\CSCI3097_Game_Of_Life_3D.exe
+2012-02-02T20:28:12.4174173Z
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\box.xnb
+2012-02-02T20:20:27.6560023Z
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Cell_Alive.xnb
+2012-02-02T20:11:14.1320700Z
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Cell_Kill.xnb
+2012-02-02T20:11:14.2250753Z
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Cell_Selected.xnb
+2012-02-02T20:11:14.4500882Z
+C:\Users\kWhittin\School\CSCI\3097\HW2\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\CSCI3097_Game_Of_Life_3D\bin\Xbox 360\Debug\Content\Grid_Background.xnb
+2012-02-02T20:11:14.5460937Z

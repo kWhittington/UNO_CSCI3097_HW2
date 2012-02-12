@@ -1,4 +1,0 @@
-Content\Cell_Alive.xnb
-Content\Grid_Background.xnb
-Content\Cell_Selected.xnb
-Content\Cell_Kill.xnb

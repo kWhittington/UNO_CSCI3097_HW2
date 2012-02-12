@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 
-namespace CSCI3097_Game_Of_Life_2D
+namespace CSCI3097_Game_Of_Life_3D
 {
   /// <summary>
   /// This is a game component that implements IUpdateable.
@@ -25,9 +25,6 @@ namespace CSCI3097_Game_Of_Life_2D
     private Texture2D cell_selected;
     private Texture2D grid_background;
     private Cell[,] cells;
-    private Cell current_cell;
-    private bool thumb_at_rest;
-    private bool is_playing;
     private int cells_horizontal;
     private int cells_vertical;
     private Rectangle grid_viewport;
@@ -94,190 +91,11 @@ namespace CSCI3097_Game_Of_Life_2D
     ///////////////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////////////////////////
-    #region inner_class_CELL
+    #region queries
     //////////////////////////////////////////////////////////////////////
-    internal class Cell
-    {
-      ////////////////////////////////////////////////////////////////////
-      #region CELL_instance_variables
-      ///////////////////////////////////////////////////////////////
-      //used to determine state of this Cell
-      internal bool isAlive;
-      //used to determine if this cell is currently selected
-      internal bool isSelected;
-      //used to update this cell's state
-      internal UpdateCell up;
-      //the cell to the west of this
-      internal Cell westCell;
-      //the cell to the east of this
-      internal Cell eastCell;
-      //the cell to the south of this
-      internal Cell southCell;
-      //the cell to the north of this
-      internal Cell northCell;
-      ///////////////////////////////////////////////////////////////
-      #endregion CELL_instance_variables
-      ////////////////////////////////////////////////////////////////////
-
-      ////////////////////////////////////////////////////////////////////
-      #region CELL_contructor
-      ///////////////////////////////////////////////////////////////
-      /*
-       * Will create a new instance of this Cell.
-       * Ensure:   cell.isAlive == false &&
-       *            cell.isSelected == false &&
-       *            cell.westCell == null &&
-       *            cell.eastCell == null &&
-       *            cell.northCell == null &&
-       *            cell.southCell == null
-       */
-      internal Cell()
-      {
-        this.isAlive = false;
-        this.isSelected = false;
-        this.westCell = null;
-        this.eastCell = null;
-        this.southCell = null;
-        this.northCell = null;
-      }
-      ///////////////////////////////////////////////////////////////
-      #endregion CELL_constructor
-      ////////////////////////////////////////////////////////////////////
-
-      ////////////////////////////////////////////////////////////////////
-      #region CELL_queries
-      ///////////////////////////////////////////////////////////////
-      /*
-       * Will return the number of neighbors of this cell.
-       * Ensure:   returns the number of cells connected
-       *            to this cell that are alive.
-       */
-      internal int neighbors()
-      {
-        int result = 0;
-        //set the additional four neighbors
-        Cell northwestcell = (this.westCell != null && this.westCell.northCell != null) ? this.westCell.northCell : null;
-        Cell northeastcell = (this.eastCell != null && this.eastCell.northCell != null) ? this.eastCell.northCell : null;
-        Cell southeastcell = (this.eastCell != null && this.eastCell.southCell != null) ? this.eastCell.southCell : null;
-        Cell southwestcell = (this.westCell != null && this.westCell.southCell != null) ? this.westCell.southCell : null;
-
-        //if the westcell is not null && it is alive
-        if (this.westCell != null && this.westCell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        //if the northwestcell is not null && it is alive
-        if (northwestcell != null && northwestcell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        //if the northcell is not null && it is alive
-        if (this.northCell != null && this.northCell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        //if the northeastcell is not null && it is alive
-        if (northeastcell != null && northeastcell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        //if the eastcell is not null && it is alive
-        if (this.eastCell != null && this.eastCell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        //if the southeastcell is not null && it is alive
-        if (southeastcell != null && southeastcell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        //if the southcell is not null && it is alive
-        if (this.southCell != null && this.southCell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        //if the southwestcell is not null && it is alive
-        if (southwestcell != null && southwestcell.isAlive == true)
-        {
-          //add it to the result
-          result = result + 1;
-        }
-        return result;
-      }
-      ///////////////////////////////////////////////////////////////
-      #endregion CELL_queries
-      ////////////////////////////////////////////////////////////////////
-
-      ////////////////////////////////////////////////////////////////////
-      #region CELL_commands
-      ///////////////////////////////////////////////////////////////
-      /*
-       * Will update this Cell's state based
-       * on the current up command method.
-       * Ensure:   if this.up == KillCell()
-       *             cell.isAlive == false
-       *           if this.up == BirthCell()
-       *             cell.isAlive == true
-       */
-      internal void update()
-      {
-        this.up(this);
-      }
-
-      /*
-       * Will change this.up to the given command.
-       * Require:  given command is KillCell or BirthCell
-       * Ensure:   this.up == KillCell() ||
-       *            this.up == BirthCell()
-       */
-      internal void setUpdate(UpdateCell command)
-      {
-        this.up = command;
-      }
-      ///////////////////////////////////////////////////////////////
-      #endregion CELL_commands
-      ////////////////////////////////////////////////////////////////////
-    }
+  
     //////////////////////////////////////////////////////////////////////
-    #endregion inner_class_CELL
-    ///////////////////////////////////////////////////////////////////////////
-
-    ///////////////////////////////////////////////////////////////////////////
-    #region delegate_methods_CELL
-    //////////////////////////////////////////////////////////////////////
-    //create the deleagte to be used to pass the kill or born commands
-    internal delegate void UpdateCell(Cell currentCell);
-
-    /*
-     * Will kill the given cell, setting
-     * currentCell.isAlive to false.
-     * Require:  currentCell != null
-     * Ensure:   currentCell.isAlive == false
-     */
-    internal void KillCell(Cell currentCell)
-    {
-      currentCell.isAlive = false;
-    }
-
-    /*
-     * Will birth the given cell, setting
-     * currentCell.isAlive to true.
-     * Require:  currentCell != null
-     * Ensure:   currentCell.isAlive == true
-     */
-    internal void BirthCell(Cell currentCell)
-    {
-      currentCell.isAlive = true;
-    }
-    //////////////////////////////////////////////////////////////////////
-    #endregion delegate_methods_CELL
+    #endregion queries
     ///////////////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////////////////////////
@@ -300,81 +118,16 @@ namespace CSCI3097_Game_Of_Life_2D
     //to run.  This is where it can query for any required services and load content.
     public override void Initialize()
     {
-      //set the ui to the ready state
-      this.thumb_at_rest = true;
-      //set the playing state to false
-      this.is_playing = false;
-      //initialize the array of cells
-      this.cells = new Cell[this.cells_horizontal, this.cells_vertical];
-      //now initialize each cell in the array
-      for (int i = 0; i < this.cells_horizontal; i++)
-      {
-        for (int j = 0; j < this.cells_vertical; j++)
-        {
-          cells[i, j] = new Cell();
-          cells[i, j].setUpdate(KillCell);
-        }
-      }
-
-      //now cycle through again, setting cell paths
-      for (int i = 0; i < this.cells_horizontal; i++)
-      {
-        for (int j = 0; j < this.cells_vertical; j++)
-        {
-          //if the current cell is not on the east border
-          if (i >= 0 && i < this.cells_horizontal - 1)
-          {
-            //set the eastCell to the next cell
-            cells[i, j].eastCell = cells[i + 1, j];
-          }
-          //or if the cell is on the east border
-          else
-          {
-            //set the eastCell to the west-border cell
-            cells[i, j].eastCell = cells[0, j];
-          }
-          //if the current cell is not on the west border
-          if (i > 0 && i < this.cells_horizontal)
-          {
-            //set this' westCell to the previous cell
-            cells[i, j].westCell = cells[i - 1, j];
-          }
-          //or if the cell is on the west border
-          else
-          {
-            //set the westCell to the east-border cell
-            cells[i, j].westCell = cells[this.cells_horizontal - 1, j];
-          }
-          //if the current cell is not on the north border
-          if (j > 0 && j < this.cells_vertical)
-          {
-            //set this' northCell to the above cell
-            cells[i, j].northCell = cells[i, j - 1];
-          }
-          //or if the cell is on the north border
-          else
-          {
-            //set the northCell to the south-border cell
-            cells[i, j].northCell = cells[i, this.cells_vertical - 1];
-          }
-          //if the current cell is not on the south border
-          if (j >= 0 && j < this.cells_vertical - 1)
-          {
-            //set this' southCell to the below cell
-            cells[i, j].southCell = cells[i, j + 1];
-          }
-          //or if the cell is on the south border
-          else
-          {
-            //set the southCell to the north-border cell
-            cells[i, j].southCell = cells[i, 0];
-          }
-        }
-      }
-      //set the north-west cell as selected
-      this.cells[0, 0].isSelected = true;
-      //save the selected cell
-      this.current_cell = this.cells[0, 0];
+      //set up the grid of cells
+      this.setUpGrid();
+      //link this grid's west border to the east
+      this.linkEasternlyTo(this);
+      //link this grid's east border to the west
+      this.linkWesternlyTo(this);
+      //link this grid's north border to the south
+      this.linkSouthernlyTo(this);
+      //link this grid's south border to the north
+      this.linkNorthernlyTo(this);
 
       base.Initialize();
       //NOTE: MUST HAPPEN HERE SO LOADCONTENT IS CALLED
@@ -388,350 +141,82 @@ namespace CSCI3097_Game_Of_Life_2D
         (float)((this.cells_vertical * this.cell_alive.Height)
         + (this.cells_vertical * 1)));
     }
-
-    
-    //Allows the game component to update itself.
-    public override void Update(GameTime gameTime)
-    {
-      GamePadState currentGamePadState = GamePad.GetState(PlayerIndex.One);
-
-      ////////////////////////////////////////////////////////////////////
-      #region camera_UPDATE
-      ///////////////////////////////////////////////////////////////
-      //if the left trigger is pressed
-      if (currentGamePadState.Triggers.Left != 0)
-      {
-        //enable camera zoom-in/out mode
-        //if the right thumbstick is up
-        if (currentGamePadState.ThumbSticks.Right.Y > 0)
-        {
-          //zoom in
-          this.scale.X = this.scale.X + 0.01f;
-          this.scale.Y = this.scale.Y + 0.01f;
-        }
-        //or if the right thumbstick is down
-        else if (currentGamePadState.ThumbSticks.Right.Y < 0)
-        {
-          //zoom out
-          this.scale.X = this.scale.X - 0.01f;
-          this.scale.Y = this.scale.Y - 0.01f;
-        }
-      }
-      //otherwise, enable camera movement mode
-      else
-      {
-        //if the right thumbstick is in the left direction
-        if (currentGamePadState.ThumbSticks.Right.X < 0)
-        {
-          //move the camera to the left
-          this.grid_viewport.X = this.grid_viewport.X
-            - (int)(currentGamePadState.ThumbSticks.Right.X * 100);
-        }
-        //or if the right thumbstick is in the right direction
-        else if (currentGamePadState.ThumbSticks.Right.X > 0)
-        {
-          //move the camera to the right
-          this.grid_viewport.X = this.grid_viewport.X
-            - (int)(currentGamePadState.ThumbSticks.Right.X * 100);
-        }
-        //if the right thumbstick is up
-        if (currentGamePadState.ThumbSticks.Right.Y > 0)
-        {
-          //move the camera up
-          this.grid_viewport.Y = this.grid_viewport.Y
-            + (int)(currentGamePadState.ThumbSticks.Right.Y * 100);
-        }
-        //or if the right thumbstick is down
-        else if (currentGamePadState.ThumbSticks.Right.Y < 0)
-        {
-          //move the camera down
-          this.grid_viewport.Y = this.grid_viewport.Y
-            + (int)(currentGamePadState.ThumbSticks.Right.Y * 100);
-        }
-      }
-      ///////////////////////////////////////////////////////////////
-      #endregion camera_UPDATE
-      ////////////////////////////////////////////////////////////////////
-
-      ////////////////////////////////////////////////////////////////////
-      #region movement_UPDATE
-      ///////////////////////////////////////////////////////////////
-
-      ///////////////////////////////////////////////////////////////
-      #region thumbstick_UPDATE
-      //////////////////////////////////////////////////////////
-      //if the user moved the left thumbstick
-      if (currentGamePadState.ThumbSticks.Left.X != 0
-        || currentGamePadState.ThumbSticks.Left.Y != 0)
-      {
-        //if the thumbstick is pointing in the left direction
-        if (currentGamePadState.ThumbSticks.Left.X < 0)
-        {
-          //move the cursor to the left
-          this.moveLeft();
-        }
-        //if the thumbstick is pointing in the right direction
-        else if (currentGamePadState.ThumbSticks.Left.X > 0)
-        {
-          //move the cursor to the right
-          this.moveRight();
-        }
-        //if the thumbstick is pointing down
-        if (currentGamePadState.ThumbSticks.Left.Y < 0)
-        {
-          //move the cursor down
-          this.moveDown();
-        }
-        //if the thumbstick is pointing up
-        else if (currentGamePadState.ThumbSticks.Left.Y > 0)
-        {
-          //move the cursor up
-          this.moveUp();
-        }
-      }
-      //////////////////////////////////////////////////////////
-      #endregion thumbstick_UPDATE
-      ///////////////////////////////////////////////////////////////
-
-      ///////////////////////////////////////////////////////////////
-      #region dpad_UPDATE
-      //////////////////////////////////////////////////////////
-      //if there is no lock on the gamepad
-      if (this.thumb_at_rest == true)
-      {
-        //if the user presses the left dpad
-        if (currentGamePadState.DPad.Left == ButtonState.Pressed)
-        {
-          //move the cursor to the left
-          this.moveLeft();
-          //set the semaphore
-          this.thumb_at_rest = false;
-        }
-        //or if the user presses the up dpad
-        else if (currentGamePadState.DPad.Up == ButtonState.Pressed)
-        {
-          //move the cursor up
-          this.moveUp();
-          //set the semaphore
-          this.thumb_at_rest = false;
-        }
-        //or if the user presses the right dpad
-        else if (currentGamePadState.DPad.Right == ButtonState.Pressed)
-        {
-          //move the cursor right
-          this.moveRight();
-          //set the semaphore
-          this.thumb_at_rest = false;
-        }
-        else if (currentGamePadState.DPad.Down == ButtonState.Pressed)
-        {
-          //move the cursor down
-          this.moveDown();
-          //set the semaphore
-          this.thumb_at_rest = false;
-        }
-      }
-      //////////////////////////////////////////////////////////
-      #endregion dpad_UPDATE
-      ///////////////////////////////////////////////////////////////
-
-      ///////////////////////////////////////////////////////////////
-      #endregion movement_UPDATE
-      ////////////////////////////////////////////////////////////////////
-
-      ////////////////////////////////////////////////////////////////////
-      #region buttons_UPDATE
-      ///////////////////////////////////////////////////////////////
-
-      ///////////////////////////////////////////////////////////////
-      #region generation_UPDATE
-      //////////////////////////////////////////////////////////
-      //if the game is in play or the right trigger is held
-      if (this.is_playing == true ||
-        currentGamePadState.Triggers.Right != 0)
-      {
-        //set the cells update
-        this.setCellsUpdate();
-        //update the cells
-        this.updateCells();
-        //NOTE: This is continuous update as long as game is in play
-        //       or the right trigger is held down
-      }
-      //if the user presses the Y button
-      if (currentGamePadState.Buttons.Y == ButtonState.Pressed
-        && this.thumb_at_rest == true)
-      {
-        //set game to playing mode
-        this.is_playing = !this.is_playing;
-      }
-      //if the user presses the X button
-      if (currentGamePadState.Buttons.X == ButtonState.Pressed &&
-        this.thumb_at_rest == true)
-      {
-        //thumb is not at rest, button pressed
-        this.thumb_at_rest = false;
-        //set the cells update
-        this.setCellsUpdate();
-
-        //update the cells
-        this.updateCells();
-        //NOTE: Will only update once per button press
-      }
-      //////////////////////////////////////////////////////////
-      #endregion generation_UPDATE
-      ///////////////////////////////////////////////////////////////
-
-      ///////////////////////////////////////////////////////////////
-      #region cell_UPDATE
-      //////////////////////////////////////////////////////////
-      //if the user pushes the A button while not moving through the cells
-      if (currentGamePadState.Buttons.A == ButtonState.Pressed
-          && this.thumb_at_rest == true)
-      {
-        //birth the selected cell
-        this.current_cell.setUpdate(BirthCell);
-        this.current_cell.update();
-      }
-      //if the user pushes the B button while not moving through the cells
-      if (currentGamePadState.Buttons.B == ButtonState.Pressed
-          && this.thumb_at_rest == true)
-      {
-        //kill the selected cell
-        this.current_cell.setUpdate(KillCell);
-        this.current_cell.update();
-      }
-      //////////////////////////////////////////////////////////
-      #endregion cell_UPDATE
-      ///////////////////////////////////////////////////////////////
-
-      ///////////////////////////////////////////////////////////////
-      #endregion buttons_UPDATE
-      ////////////////////////////////////////////////////////////////////
-
-      //if the controller is not in uses
-      if (!this.inUse(currentGamePadState))
-      {
-        //reset the ui state to the ready position
-        this.thumb_at_rest = true;
-      }
-      base.Update(gameTime);
-    }
-
+    //////////////////////////////////////////////////////////////////////
+    #region helper_methods_INITIALIZE
     /////////////////////////////////////////////////////////////////
-    #region helper_methods_UPDATE
-    ////////////////////////////////////////////////////////////
     /*
-     * Will change the currently selected cell to
-     * the one on the left of the currently selected
-     * cell if one exits.  Otherwise, the currently
-     * selected cell will stay just that.
-     * Require:  the user moved the left thumbstick
-     *            to the left.
-     * Ensure:   currently_selected_cell.isWestOf(old_selected_cell) == true
+     * Will initialize and set up the grid of cells
+     * for use. Each cell will be initialized and any
+     * boarder cells will not have a link past itself.
+     * ENSURE:   this.grid.any_cell != null &&
+     *            this.grid.west_border_cells.west_cell == null &&
+     *            this.grid.north_border_cells.north_cell == null &&
+     *            this.grid.east_border_cells.east_cell == null &&
+     *            this.grid.south_border_cells.south_cell == null
      */
-    internal void moveLeft()
+    internal void setUpGrid()
     {
-      //if the current cell is not on the west border
-      if (this.current_cell.westCell != null)
+      //initialize the array of cells
+      this.cells = new Cell[this.cells_horizontal, this.cells_vertical];
+      //now initialize each cell in the array
+      for (int i = 0; i < this.cells_horizontal; i++)
       {
-        //then make the move
+        for (int j = 0; j < this.cells_vertical; j++)
+        {
+          cells[i, j] = new Cell();
+        }
+      }
 
-        //save the selected cell
-        Cell tempCell = this.current_cell;
-
-        //make it not selected
-        tempCell.isSelected = false;
-        //make the cell to the west selected
-        tempCell.westCell.isSelected = true;
-        //save the new selected cell
-        this.current_cell = tempCell.westCell;
+      //now cycle through again, setting cell paths
+      for (int i = 0; i < this.cells_horizontal; i++)
+      {
+        for (int j = 0; j < this.cells_vertical; j++)
+        {
+          //if the current cell is not on the east border
+          if (i >= 0 && i < this.cells_horizontal - 1)
+          {
+            //set the east_cell to the next cell
+            cells[i, j].setEastCell(cells[i + 1, j]);
+          }
+          //if the current cell is not on the west border
+          if (i > 0 && i < this.cells_horizontal)
+          {
+            //set this' west_cell to the previous cell
+            cells[i, j].setWestCell(cells[i - 1, j]);
+          }
+          //if the current cell is not on the north border
+          if (j > 0 && j < this.cells_vertical)
+          {
+            //set this' north_cell to the above cell
+            cells[i, j].setNorthCell(cells[i, j - 1]);
+          }
+          //if the current cell is not on the south border
+          if (j >= 0 && j < this.cells_vertical - 1)
+          {
+            //set this' south_cell to the below cell
+            cells[i, j].setSouthCell(cells[i, j + 1]);
+          }
+        }
       }
     }
-
+    /////////////////////////////////////////////////////////////////
+    #endregion helper_methods_INITIALIZE
+    //////////////////////////////////////////////////////////////////////
     /*
-     * Will change the currently selected cell to
-     * the one on the right of the currently selected
-     * cell if one exits.  Otherwise, the currently
-     * selected cell will stay just that.
-     * Require:  the user moved the left thumbstick
-     *            to the right.
-     * Ensure:   currently_selected_cell.isEastOf(old_selected_cell) == true
+     * Will return the first cell in the grid.
+     * ENSURE:   return this.cells[0,0]
      */
-    internal void moveRight()
+    public Cell firstCell()
     {
-      //if the current cell is not on the east border
-      if (this.current_cell.eastCell != null)
-      {
-        //then make the move
-        //save the current cell
-        Cell tempCell = this.current_cell;
-
-        //make it not selected
-        tempCell.isSelected = false;
-        //make the cell to the west selected
-        tempCell.eastCell.isSelected = true;
-        //save the new selected cell
-        this.current_cell = tempCell.eastCell;
-      }
-    }
-
-    /*
-     * Will change the currently selected cell to
-     * the one above the currently selected
-     * cell if one exits.  Otherwise, the currently
-     * selected cell will stay just that.
-     * Require:  the user moved the left thumbstick up.
-     * Ensure:   currently_selected_cell.isNorthOf(old_selected_cell) == true
-     */
-    internal void moveUp()
-    {
-      //if the current cell is not on the north border
-      if (this.current_cell.northCell != null)
-      {
-        //save the current cell
-        Cell tempCell = this.current_cell;
-
-        //make it not selected
-        tempCell.isSelected = false;
-        //make the cell to the west selected
-        tempCell.northCell.isSelected = true;
-        //save the new selected cell
-        this.current_cell = tempCell.northCell;
-      }
-    }
-
-    /*
-     * Will change the currently selected cell to
-     * the one below the currently selected
-     * cell if one exits.  Otherwise, the currently
-     * selected cell will stay just that.
-     * Require:  the user moved the left thumbstick down.
-     * Ensure:   currently_selected_cell.isSouthOf(old_selected_cell) == true
-     */
-    internal void moveDown()
-    {
-      //if the current cell is not on the south border
-      if (this.current_cell.southCell != null)
-      {
-        //save the current cell
-        Cell tempCell = this.current_cell;
-
-        //make it not selected
-        tempCell.isSelected = false;
-        //make the cell to the west selected
-        tempCell.southCell.isSelected = true;
-        //save the new selected cell
-        this.current_cell = tempCell.southCell;
-      }
+      return this.cells[0, 0];
     }
 
     /*
      * Will cycle through all cells, setting their cell.up
      * command to either kill or birth them next round.
-     * ENSURE:   all.cells.setUpdate(KillCell XOR BirthCell
-     */
-    internal void setCellsUpdate()
-    {
+     * ENSURE:   all.cells.setUpdate(KillCell XOR BirthCell)
+     */ 
+    public void primeCells() {
       //cycle through the grid of cells and update their up methods
       for (int i = 0; i < this.cells_horizontal; i++)
       {
@@ -743,25 +228,25 @@ namespace CSCI3097_Game_Of_Life_2D
           int cellNeighbors = currentCell.neighbors();
 
           //if the cell is alive
-          if (currentCell.isAlive == true)
+          if (currentCell.isAlive() == true)
           {
             //if the cell has fewer than two neighbors
             if (cellNeighbors < 2)
             {
               //kill the cell
-              currentCell.setUpdate(KillCell);
+              currentCell.killCell();
             }
             //if the cell has 2 or 3 neighbors
             if (cellNeighbors == 2 || cellNeighbors == 3)
             {
               //keep the cell alive
-              currentCell.setUpdate(BirthCell);
+              currentCell.birthCell();
             }
             //if the cell has more than three neighbors
             if (cellNeighbors > 3)
             {
               //kill the cell
-              currentCell.setUpdate(KillCell);
+              currentCell.killCell();
             }
           }
           //otherwise, if the cell is dead
@@ -771,7 +256,7 @@ namespace CSCI3097_Game_Of_Life_2D
             if (cellNeighbors == 3)
             {
               //birth the cell
-              currentCell.setUpdate(BirthCell);
+              currentCell.birthCell();
             }
           }
         }
@@ -781,8 +266,10 @@ namespace CSCI3097_Game_Of_Life_2D
     /*
      * Will update all cells, running their cell.up command.
      * ENSURE:   all.cells.up() is executed
+     * NOTE:  IN ALMOST EVERY OCCASION, PRIMECELLS()
+     *        SHOULD BE CALLED PRIOR TO THIS METHOD
      */
-    internal void updateCells()
+    public void advanceCells()
     {
       //cycle through the grid of cells, executing their up methods
       for (int i = 0; i < this.cells_horizontal; i++)
@@ -795,83 +282,156 @@ namespace CSCI3097_Game_Of_Life_2D
     }
 
     /*
-     * Will birth the selected cell, setting isAlive
-     * to true.
-     * Ensure:   currently_selected_cell.isAlive == true
+     * Will link this grid easternly to the given grid.
+     * REQUIRE:  this.grid.cells_vertical == given.grid.cells_vertical
+     * ENSURE:   this.grid.west_border_cells.west_cells 
+     *            == given.grid.east_border_cells
+     *           && given.grid.east_border_cells.east_cells
+     *            == this.grid.west_border_cells
      */
-    internal void birthCell()
-    {
-      this.current_cell.setUpdate(BirthCell);
-    }
-
-    /*
-     * Will return whether or not the controller
-     * is in use by the player.
-     * REQUIRE:  given.gamePadState != null
-     * ENSURE:   if any button or joystick is
-     *            being used and sending input
-     *            to program,
-     *            return true.
-     *           otherwise,
-     *            return false.
-     */
-    internal bool inUse(GamePadState gamePadState)
-    {
-      bool result = true;
-
-      if (gamePadState.ThumbSticks.Left.X == 0
-        && gamePadState.ThumbSticks.Left.Y == 0
-        && gamePadState.Buttons.LeftStick == ButtonState.Released
-        && gamePadState.ThumbSticks.Right.X == 0
-        && gamePadState.ThumbSticks.Right.Y == 0
-        && gamePadState.Buttons.RightStick == ButtonState.Released
-        && gamePadState.DPad.Left == ButtonState.Released
-        && gamePadState.DPad.Up == ButtonState.Released
-        && gamePadState.DPad.Right == ButtonState.Released
-        && gamePadState.DPad.Down == ButtonState.Released
-        && gamePadState.Buttons.A == ButtonState.Released
-        && gamePadState.Buttons.B == ButtonState.Released
-        && gamePadState.Buttons.X == ButtonState.Released
-        && gamePadState.Buttons.Y == ButtonState.Released
-        && gamePadState.Triggers.Left == 0
-        && gamePadState.Triggers.Right == 0
-        && gamePadState.Buttons.LeftShoulder == ButtonState.Released
-        && gamePadState.Buttons.RightShoulder == ButtonState.Released)
-      {
-        result = false;
+    public void linkEasternlyTo(Grid west_grid) {
+      //loop through the grid of cells
+      for (int j = 0; j < this.cells_vertical; j++) {
+        //set this grid's west border to the west_grid's east border
+        this.cells[0,j].setWestCell(
+          west_grid.cells[west_grid.cells_horizontal-1,j]);
+        //set the west_grid's east border to this grid's west border
+        west_grid.cells[west_grid.cells_horizontal-1,j].setEastCell(
+          this.cells[0,j]);
       }
-
-      return result;
     }
 
     /*
-     * Will return the cell that is currently selected.
-     * Ensure:   returned cell.isSelected == true
+     * Will link this grid southernly to the given grid.
+     * REQUIRE:  this.grid.cells_horizontal == given.grid.cells_horizontal
+     * ENSURE:   this.grid.north_border_cells.north_cells
+     *            == given.grid.south_border_cells
+     *           && given.grid.south_border_cells.south_cells
+     *            == this.grid.north_border_cells
      */
-    internal Cell currentSelection()
+    public void linkSouthernlyTo(Grid north_grid)
     {
-      //variable to be returned
-      Cell currently_selected_cell = new Cell();
-
-      //cycle through the cells until the end is reached
+      //loop through the grid of cells
       for (int i = 0; i < this.cells_horizontal; i++)
       {
-        for (int j = 0; j < this.cells_vertical; j++)
-        {
-          //if the current cell is the one selected
-          if (cells[i, j].isSelected == true)
-          {
-            //save the cell
-            currently_selected_cell = cells[i, j];
-          }
-        }
+        //set this grid's north border to the north_grid's south border
+        this.cells[i, 0].setNorthCell(
+          north_grid.cells[i, north_grid.cells_vertical - 1]);
+        //set the north_grid's south border to this grid's north border
+        north_grid.cells[i, north_grid.cells_vertical - 1].setSouthCell(
+          this.cells[i, 0]);
       }
-
-      return currently_selected_cell;
     }
-    ////////////////////////////////////////////////////////////
-    #endregion helper_methods_UPDATE
-    /////////////////////////////////////////////////////////////////
+
+    /*
+     * Will link this grid westernly to the given grid.
+     * REQUIRE:  this.grid.cells_vertical == given.grid.cells_vertical
+     * ENSURE:   this.grid.east_border_cells.east_cells
+     *            == given.grid.west_border_cells
+     *           && given.grid.west_border_cells.west_cells
+     *            == this.grid.east_border_cells
+     */
+    public void linkWesternlyTo(Grid east_grid)
+    {
+      //loop through the grid of cells
+      for (int j = 0; j < this.cells_vertical; j++)
+      {
+        //set this grid's east border to the east_grid's west border
+        this.cells[this.cells_horizontal - 1, j].setEastCell(
+          east_grid.cells[0, j]);
+        //set the east_grid's west border to this grid's east border
+        east_grid.cells[0, j].setWestCell(
+          this.cells[this.cells_horizontal - 1, j]);
+      }
+    }
+
+    /*
+     * Will link this grid northernly to the given grid.
+     * REQUIRE:  this.grid.cells_horizontal == given.grid.cells_horizontal
+     * ENSURE:   this.grid.south_border_cells.south_cells
+     *            == given.grid.north_border_cells
+     *           && given.grid.north_border_cells.north_cells
+     *            == this.grid.south_border_cells
+     */
+    public void linkNorthernlyTo(Grid south_grid)
+    {
+      //loop through the grid of cells
+      for (int i = 0; i < this.cells_horizontal; i++)
+      {
+        //set this grid's south border to the south_grid's north border
+        this.cells[i, this.cells_vertical - 1].setSouthCell(
+          south_grid.cells[i, 0]);
+        //set the south_grid's north border to this grid's south border
+        south_grid.cells[i, 0].setNorthCell(
+          this.cells[i, this.cells_vertical - 1]);
+      }
+    }
+
+    //Allows the game component to update itself.
+    public override void Update(GameTime gameTime)
+    {
+      //GamePadState currentGamePadState = GamePad.GetState(PlayerIndex.One);
+
+      ////////////////////////////////////////////////////////////////////
+      #region camera_UPDATE
+      ///////////////////////////////////////////////////////////////
+      ////if the left trigger is pressed
+      //if (currentGamePadState.Triggers.Left != 0)
+      //{
+      //  //enable camera zoom-in/out mode
+      //  //if the right thumbstick is up
+      //  if (currentGamePadState.ThumbSticks.Right.Y > 0)
+      //  {
+      //    //zoom in
+      //    this.scale.X = this.scale.X + 0.01f;
+      //    this.scale.Y = this.scale.Y + 0.01f;
+      //  }
+      //  //or if the right thumbstick is down
+      //  else if (currentGamePadState.ThumbSticks.Right.Y < 0)
+      //  {
+      //    //zoom out
+      //    this.scale.X = this.scale.X - 0.01f;
+      //    this.scale.Y = this.scale.Y - 0.01f;
+      //  }
+      //}
+      ////otherwise, enable camera movement mode
+      //else
+      //{
+      //  //if the right thumbstick is in the left direction
+      //  if (currentGamePadState.ThumbSticks.Right.X < 0)
+      //  {
+      //    //move the camera to the left
+      //    this.grid_viewport.X = this.grid_viewport.X
+      //      - (int)(currentGamePadState.ThumbSticks.Right.X * 100);
+      //  }
+      //  //or if the right thumbstick is in the right direction
+      //  else if (currentGamePadState.ThumbSticks.Right.X > 0)
+      //  {
+      //    //move the camera to the right
+      //    this.grid_viewport.X = this.grid_viewport.X
+      //      - (int)(currentGamePadState.ThumbSticks.Right.X * 100);
+      //  }
+      //  //if the right thumbstick is up
+      //  if (currentGamePadState.ThumbSticks.Right.Y > 0)
+      //  {
+      //    //move the camera up
+      //    this.grid_viewport.Y = this.grid_viewport.Y
+      //      + (int)(currentGamePadState.ThumbSticks.Right.Y * 100);
+      //  }
+      //  //or if the right thumbstick is down
+      //  else if (currentGamePadState.ThumbSticks.Right.Y < 0)
+      //  {
+      //    //move the camera down
+      //    this.grid_viewport.Y = this.grid_viewport.Y
+      //      + (int)(currentGamePadState.ThumbSticks.Right.Y * 100);
+      //  }
+      //}
+      ///////////////////////////////////////////////////////////////
+      #endregion camera_UPDATE
+      ////////////////////////////////////////////////////////////////////
+
+      base.Update(gameTime);
+    }
 
     public override void Draw(GameTime gameTime)
     {
@@ -897,7 +457,7 @@ namespace CSCI3097_Game_Of_Life_2D
             );
 
           //if the cell is alive, draw the alive texture
-          if (this.cells[i, j].isAlive == true)
+          if (this.cells[i, j].isAlive() == true)
           {
             spriteBatch.Draw(cell_alive, draw_rectangle, Color.White);
           }
@@ -907,7 +467,7 @@ namespace CSCI3097_Game_Of_Life_2D
             spriteBatch.Draw(grid_background, draw_rectangle, Color.White);
           }
           //if the cell is selected, draw the selected texture
-          if (this.cells[i, j].isSelected == true)
+          if (this.cells[i, j].isSelected() == true)
           {
             spriteBatch.Draw(cell_selected, draw_rectangle, Color.White);
           }
